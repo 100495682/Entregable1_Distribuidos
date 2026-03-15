@@ -11,6 +11,12 @@ CLIENTE1_MQ = cliente1_mq
 CLIENTE2_MQ = cliente2_mq
 CLIENTE3_MQ = cliente3_mq
 CLIENTE4_MQ = cliente4_mq
+
+CLIENTE1_LOCAL = cliente1_local
+CLIENTE2_LOCAL = cliente2_local
+CLIENTE3_LOCAL = cliente3_local
+CLIENTE4_LOCAL = cliente4_local
+
 SERVIDOR_MQ = servidor_mq
 
 OBJ_LOCAL = storage.o claves.o
@@ -24,7 +30,7 @@ OBJ_APP4 = app_cliente4.o
 
 .PHONY: all clean
 
-all: $(LIB_LOCAL) $(LIB_PROXY) $(SERVIDOR_MQ) $(CLIENTE1_MQ) $(CLIENTE2_MQ) $(CLIENTE3_MQ) $(CLIENTE4_MQ)
+all: $(LIB_LOCAL) $(LIB_PROXY) $(SERVIDOR_MQ) $(CLIENTE1_MQ) $(CLIENTE2_MQ) $(CLIENTE3_MQ) $(CLIENTE4_MQ) $(CLIENTE1_LOCAL) $(CLIENTE2_LOCAL) $(CLIENTE3_LOCAL) $(CLIENTE4_LOCAL)
 
 $(LIB_LOCAL): $(OBJ_LOCAL)
 	$(CC) -shared -o $(LIB_LOCAL) $(OBJ_LOCAL) $(PTHREAD)
@@ -46,6 +52,18 @@ $(CLIENTE3_MQ): app_cliente3.o $(LIB_PROXY)
 
 $(CLIENTE4_MQ): app_cliente4.o $(LIB_PROXY)
 	$(CC) -o $(CLIENTE4_MQ) app_cliente4.o -L. -lproxyclaves $(RTLIB) $(RPATH)
+
+$(CLIENTE1_LOCAL): app_cliente1.o $(LIB_LOCAL)
+	$(CC) -o $(CLIENTE1_LOCAL) app_cliente1.o -L. -lclaves $(PTHREAD) $(RPATH)
+
+$(CLIENTE2_LOCAL): app_cliente2.o $(LIB_LOCAL)
+	$(CC) -o $(CLIENTE2_LOCAL) app_cliente2.o -L. -lclaves $(PTHREAD) $(RPATH)
+
+$(CLIENTE3_LOCAL): app_cliente3.o $(LIB_LOCAL)
+	$(CC) -o $(CLIENTE3_LOCAL) app_cliente3.o -L. -lclaves $(PTHREAD) $(RPATH)
+
+$(CLIENTE4_LOCAL): app_cliente4.o $(LIB_LOCAL)
+	$(CC) -o $(CLIENTE4_LOCAL) app_cliente4.o -L. -lclaves $(PTHREAD) $(RPATH)
 
 storage.o: storage.c storage.h claves.h
 	$(CC) $(CFLAGS) -c storage.c -o storage.o
@@ -72,4 +90,4 @@ app_cliente4.o: app_cliente4.c claves.h
 	$(CC) $(CFLAGS) -c app_cliente4.c -o app_cliente4.o
 
 clean:
-	rm -f *.o *.so $(CLIENTE1_MQ) $(CLIENTE2_MQ) $(CLIENTE3_MQ) $(CLIENTE4_MQ) $(SERVIDOR_MQ)
+	rm -f *.o *.so $(CLIENTE1_MQ) $(CLIENTE2_MQ) $(CLIENTE3_MQ) $(CLIENTE4_MQ) $(SERVIDOR_MQ) $(CLIENTE1_LOCAL) $(CLIENTE2_LOCAL) $(CLIENTE3_LOCAL) $(CLIENTE4_LOCAL)
